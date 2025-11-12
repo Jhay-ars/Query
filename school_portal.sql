@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 18, 2025 at 04:59 PM
+-- Generation Time: Nov 12, 2025 at 03:47 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `activities` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(100) NOT NULL,
   `category` enum('Written','Performance','Exam') NOT NULL,
   `spreadsheet_id` int(11) NOT NULL,
   `max_score` float DEFAULT 100,
@@ -71,7 +71,9 @@ INSERT INTO `activities` (`id`, `name`, `category`, `spreadsheet_id`, `max_score
 (29, 'act3', 'Written', 15, 30, '2025-05-18 13:24:55'),
 (30, 'perf1', 'Performance', 15, 50, '2025-05-18 13:25:04'),
 (31, 'perf2', 'Performance', 15, 50, '2025-05-18 13:25:12'),
-(32, 'exam1', 'Exam', 15, 100, '2025-05-18 13:25:18');
+(32, 'exam1', 'Exam', 15, 100, '2025-05-18 13:25:18'),
+(33, 'Blud', 'Written', 12, 20, '2025-11-12 02:41:21'),
+(34, 'ds\'fhldsf', 'Written', 12, 50, '2025-11-12 02:41:45');
 
 -- --------------------------------------------------------
 
@@ -142,7 +144,7 @@ INSERT INTO `attendance` (`id`, `student_id`, `spreadsheet_id`, `date`, `status`
 CREATE TABLE `folders` (
   `id` int(11) NOT NULL,
   `teacher_id` int(11) NOT NULL,
-  `folder_name` varchar(255) NOT NULL,
+  `folder_name` varchar(100) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -191,8 +193,8 @@ INSERT INTO `grades` (`id`, `student_id`, `spreadsheet_id`, `raw_grade`, `transm
 CREATE TABLE `invitation_tokens` (
   `id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL,
-  `token` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
+  `token` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
   `expires_at` datetime NOT NULL,
   `used` tinyint(1) DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -270,7 +272,7 @@ INSERT INTO `scores` (`id`, `student_id`, `activity_id`, `score`, `created_at`) 
 
 CREATE TABLE `spreadsheets` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(100) NOT NULL,
   `folder_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -324,8 +326,8 @@ INSERT INTO `spreadsheet_settings` (`id`, `spreadsheet_id`, `written_percentage`
 
 CREATE TABLE `students` (
   `id` int(11) NOT NULL,
-  `student_id` varchar(50) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
   `spreadsheet_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -335,28 +337,15 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `student_id`, `name`, `spreadsheet_id`, `created_at`) VALUES
-(2, '20207093', 'student1', 1, '2025-05-07 15:42:37'),
-(3, '10101010', 'student2', 1, '2025-05-07 16:18:53'),
-(9, '10101010', 'student2', 2, '2025-05-07 22:48:17'),
-(10, '123456', 'student3', 2, '2025-05-08 00:42:19'),
-(11, '10101010', 'student2', 4, '2025-05-08 01:02:20'),
-(13, '10101010', 'student2', 8, '2025-05-14 12:24:54'),
-(14, '123456', 'joseph', 8, '2025-05-14 12:26:33'),
-(20, '10101010', 'student2', 12, '2025-05-17 11:30:11'),
-(23, '987654321', 'pota', 15, '2025-05-18 12:46:36');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `test_table`
---
-
-CREATE TABLE `test_table` (
-  `name` varchar(100) NOT NULL,
-  `school` varchar(100) NOT NULL,
-  `age` varchar(100) NOT NULL,
-  `address` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+(2, 20207093, 'student1', 1, '2025-05-07 15:42:37'),
+(3, 10101010, 'student2', 1, '2025-05-07 16:18:53'),
+(9, 10101010, 'student2', 2, '2025-05-07 22:48:17'),
+(10, 123456, 'student3', 2, '2025-05-08 00:42:19'),
+(11, 10101010, 'student2', 4, '2025-05-08 01:02:20'),
+(13, 10101010, 'student2', 8, '2025-05-14 12:24:54'),
+(14, 123456, 'joseph', 8, '2025-05-14 12:26:33'),
+(20, 10101010, 'student2', 12, '2025-05-17 11:30:11'),
+(23, 987654321, 'pota', 15, '2025-05-18 12:46:36');
 
 -- --------------------------------------------------------
 
@@ -371,11 +360,11 @@ CREATE TABLE `users` (
   `email` varchar(100) NOT NULL,
   `user_type` enum('student','teacher','admin') NOT NULL DEFAULT 'student',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `reset_question1` varchar(255) NOT NULL,
-  `reset_answer1` varchar(255) NOT NULL,
-  `reset_question2` varchar(255) NOT NULL,
-  `reset_answer2` varchar(255) NOT NULL,
-  `student_lrn` varchar(50) DEFAULT NULL
+  `reset_question1` varchar(150) NOT NULL,
+  `reset_answer1` varchar(150) NOT NULL,
+  `reset_question2` varchar(150) NOT NULL,
+  `reset_answer2` varchar(150) NOT NULL,
+  `student_lrn` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -415,9 +404,9 @@ ALTER TABLE `activities`
 --
 ALTER TABLE `attendance`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `spreadsheet_id` (`spreadsheet_id`),
-  ADD KEY `idx_attendance_date` (`date`),
-  ADD KEY `idx_attendance_student_id` (`student_id`);
+  ADD KEY `idx_attendance_student_id` (`student_id`),
+  ADD KEY `idx_attendance_spreadsheet_id` (`spreadsheet_id`),
+  ADD KEY `idx_attendance_date` (`date`);
 
 --
 -- Indexes for table `folders`
@@ -432,7 +421,14 @@ ALTER TABLE `folders`
 ALTER TABLE `grades`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `student_spreadsheet` (`student_id`,`spreadsheet_id`),
-  ADD KEY `spreadsheet_id` (`spreadsheet_id`);
+  ADD KEY `idx_grades_spreadsheet_id` (`spreadsheet_id`);
+
+--
+-- Indexes for table `invitation_tokens`
+--
+ALTER TABLE `invitation_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_invitation_student_id` (`student_id`);
 
 --
 -- Indexes for table `scores`
@@ -461,8 +457,8 @@ ALTER TABLE `spreadsheet_settings`
 --
 ALTER TABLE `students`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `spreadsheet_id` (`spreadsheet_id`),
-  ADD KEY `idx_students_student_id` (`student_id`);
+  ADD KEY `idx_students_student_id` (`student_id`),
+  ADD KEY `idx_students_spreadsheet_id` (`spreadsheet_id`);
 
 --
 -- Indexes for table `users`
@@ -481,7 +477,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `activities`
 --
 ALTER TABLE `activities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `attendance`
@@ -500,6 +496,12 @@ ALTER TABLE `folders`
 --
 ALTER TABLE `grades`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `invitation_tokens`
+--
+ALTER TABLE `invitation_tokens`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `scores`
@@ -539,52 +541,58 @@ ALTER TABLE `users`
 -- Constraints for table `activities`
 --
 ALTER TABLE `activities`
-  ADD CONSTRAINT `activities_ibfk_1` FOREIGN KEY (`spreadsheet_id`) REFERENCES `spreadsheets` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_activities_spreadsheet` FOREIGN KEY (`spreadsheet_id`) REFERENCES `spreadsheets` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `attendance`
 --
 ALTER TABLE `attendance`
-  ADD CONSTRAINT `attendance_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `attendance_ibfk_2` FOREIGN KEY (`spreadsheet_id`) REFERENCES `spreadsheets` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_attendance_spreadsheet` FOREIGN KEY (`spreadsheet_id`) REFERENCES `spreadsheets` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_attendance_student` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `folders`
 --
 ALTER TABLE `folders`
-  ADD CONSTRAINT `folders_ibfk_1` FOREIGN KEY (`teacher_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_folders_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `grades`
 --
 ALTER TABLE `grades`
-  ADD CONSTRAINT `grades_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `grades_ibfk_2` FOREIGN KEY (`spreadsheet_id`) REFERENCES `spreadsheets` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_grades_spreadsheet` FOREIGN KEY (`spreadsheet_id`) REFERENCES `spreadsheets` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_grades_student` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `invitation_tokens`
+--
+ALTER TABLE `invitation_tokens`
+  ADD CONSTRAINT `fk_invitation_student` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `scores`
 --
 ALTER TABLE `scores`
-  ADD CONSTRAINT `scores_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `scores_ibfk_2` FOREIGN KEY (`activity_id`) REFERENCES `activities` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_scores_activity` FOREIGN KEY (`activity_id`) REFERENCES `activities` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_scores_student` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `spreadsheets`
 --
 ALTER TABLE `spreadsheets`
-  ADD CONSTRAINT `spreadsheets_ibfk_1` FOREIGN KEY (`folder_id`) REFERENCES `folders` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_spreadsheets_folder` FOREIGN KEY (`folder_id`) REFERENCES `folders` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `spreadsheet_settings`
 --
 ALTER TABLE `spreadsheet_settings`
-  ADD CONSTRAINT `spreadsheet_settings_ibfk_1` FOREIGN KEY (`spreadsheet_id`) REFERENCES `spreadsheets` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_settings_spreadsheet` FOREIGN KEY (`spreadsheet_id`) REFERENCES `spreadsheets` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `students`
 --
 ALTER TABLE `students`
-  ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`spreadsheet_id`) REFERENCES `spreadsheets` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_students_spreadsheet` FOREIGN KEY (`spreadsheet_id`) REFERENCES `spreadsheets` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
